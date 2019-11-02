@@ -9,6 +9,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import it.arsinfo.mtconnect.model.streams.MTConnectStreamsType;
+
 @SpringBootApplication
 public class ConsumingRestApplication {
 
@@ -26,8 +28,8 @@ public class ConsumingRestApplication {
 	@Bean
 	public CommandLineRunner run(RestTemplate restTemplate) throws Exception {
 		return args -> {
-			Quote quote = restTemplate.getForObject(
-					"https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+			MTConnectStreamsType quote = restTemplate.getForObject(
+					"https://smstestbed.nist.gov/vds/current", MTConnectStreamsType.class);
 			log.info(quote.toString());
 		};
 	}
