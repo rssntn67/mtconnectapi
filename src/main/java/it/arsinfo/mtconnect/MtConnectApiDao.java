@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import it.arsinfo.mtconnect.streams.AvailabilityType;
+import it.arsinfo.mtconnect.streams.EmergencyStopType;
 import it.arsinfo.mtconnect.streams.MTConnectStreamsType;
 
 
@@ -29,42 +30,35 @@ public class MtConnectApiDao {
 		final List<Event> events = new ArrayList<>();
 		MTConnectStreamsType quote = restTemplate.getForObject(
 				"https://smstestbed.nist.gov/vds/current", MTConnectStreamsType.class);
-		log.info("headerVersion: {}",quote.getHeader().getVersion());
-		log.info("headerVersionId: {}",quote.getHeader().getInstanceId());
-		log.info("nextSequence: {}",quote.getHeader().getNextSequence());
 		quote.getStreams().getDeviceStream().forEach( devStream -> {
-			log.info("{} {}", devStream.getName(), devStream.getUuid());
 			devStream.getComponentStream().stream()
 				.filter(cs -> cs.getEvents() != null)
 				.forEach(cs -> {
-					log.info("{}: {} {} {} ", 
-						devStream.getName(),
-						cs.getName(), 
-						cs.getUuid(),
-						cs.getComponent()
-					);
 					cs.getEvents().getEvent().stream()
 					.filter(e -> e!= null)
 					.forEach(e -> {
-						log.info("events: {}: {}: {}", 
-							devStream.getName(),
-							cs.getName(), 
-							e.getName().getNamespaceURI()
-						);
 						if (e.getValue() != null && "avail".equals(e.getValue().getName())) {
 							AvailabilityType avail = (AvailabilityType) e.getValue();
 							events.add(new Event(
 									avail.getSequence().longValue(),devStream.getName(),
-									cs.getName(),
+									cs.getName(),"Availability",
 									avail.getValue()));
+						} else if (e.getValue() != null && "estop".equals(e.getValue().getName())) {
+							EmergencyStopType estop = (EmergencyStopType) e.getValue();
+							events.add(new Event(
+									estop.getSequence().longValue(),devStream.getName(),
+									cs.getName(),"EmergencyStop",
+									estop.getValue()));
 							} else {
 							events.add(new Event(counter.incrementAndGet(),
 									devStream.getName(),
 									cs.getName(),
+									e.getClass().toString(),
 								e.getValue().getName()));
 						}
 				});
 			});
+			events.forEach(eve -> log.info(eve.toString()));
 		
 		});
 
