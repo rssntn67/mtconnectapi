@@ -34,14 +34,27 @@ public class ConsumingRestApplication {
 			log.info("headerVersionId: {}",quote.getHeader().getInstanceId());
 			quote.getStreams().getDeviceStream().forEach( devStream -> {
 				log.info("{} {}", devStream.getName(), devStream.getUuid());
-				devStream.getComponentStream().forEach(cs -> {
-					log.info("{} {}: {} {} {} ", 
-							devStream.getName(), 
-							devStream.getUuid(), 
+				devStream.getComponentStream().stream()
+					.filter(cs -> cs.getEvents() != null)
+					.forEach(cs -> {
+						log.info("{}: {} {} {} ", 
+							devStream.getName(),
 							cs.getName(), 
 							cs.getUuid(),
-							cs.getComponent());
+							cs.getComponent()
+						);
+						cs.getEvents().getEvent().stream()
+						.filter(e -> e!= null)
+						.forEach(e -> {
+							log.info("{}: {}: {}", 
+								devStream.getName(),
+								cs.getName(), 
+								e.getName()
+							);
+						
+					});
 				});
+			
 			});
 		};
 	}
