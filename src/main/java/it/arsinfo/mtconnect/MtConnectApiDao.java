@@ -26,11 +26,13 @@ public class MtConnectApiDao {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	private MTConnectStreamsType get() {
+		return restTemplate.getForObject(
+				"https://smstestbed.nist.gov/vds/current", MTConnectStreamsType.class);		
+	}
 	public List<Event> getEvents(String name) {
 		final List<Event> events = new ArrayList<>();
-		MTConnectStreamsType quote = restTemplate.getForObject(
-				"https://smstestbed.nist.gov/vds/current", MTConnectStreamsType.class);
-		quote.getStreams().getDeviceStream().forEach( devStream -> {
+		get().getStreams().getDeviceStream().forEach( devStream -> {
 			devStream.getComponentStream().stream()
 				.filter(cs -> cs.getEvents() != null)
 				.forEach(cs -> {
@@ -63,5 +65,28 @@ public class MtConnectApiDao {
 		});
 
 		return events;
+	}
+
+	public List<Condition> getConditions(String name) {
+		final List<Condition> conditions = new ArrayList<>();
+		get().getStreams().getDeviceStream().forEach( devStream -> {
+			devStream.getComponentStream().stream()
+				.filter(cs -> cs.getCondition() != null)
+				.forEach(cs -> {
+					cs.getCondition().getCondition().stream()
+					.filter(c -> c!= null)
+					.forEach(e -> {
+						conditions.add(new Condition(counter.incrementAndGet(),
+									devStream.getName(),
+									cs.getName(),
+									e.getClass().toString(),
+									e.getValue().getType(),
+								e.getValue().getName()));
+				});
+			});
+			conditions.forEach(eve -> log.info(eve.toString()));
+		
+		});
+		return conditions;
 	}
 }
