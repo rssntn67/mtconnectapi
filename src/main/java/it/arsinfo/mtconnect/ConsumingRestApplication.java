@@ -9,7 +9,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import it.arsinfo.mtconnect.model.streams.MTConnectStreamsType;
+import it.arsinfo.mtconnect.streams.MTConnectStreamsType;
 
 @SpringBootApplication
 public class ConsumingRestApplication {
@@ -30,7 +30,19 @@ public class ConsumingRestApplication {
 		return args -> {
 			MTConnectStreamsType quote = restTemplate.getForObject(
 					"https://smstestbed.nist.gov/vds/current", MTConnectStreamsType.class);
-			log.info(quote.toString());
+			log.info("headerVersion: {}",quote.getHeader().getVersion());
+			log.info("headerVersionId: {}",quote.getHeader().getInstanceId());
+			quote.getStreams().getDeviceStream().forEach( devStream -> {
+				log.info("{} {}", devStream.getName(), devStream.getUuid());
+				devStream.getComponentStream().forEach(cs -> {
+					log.info("{} {}: {} {} {} ", 
+							devStream.getName(), 
+							devStream.getUuid(), 
+							cs.getName(), 
+							cs.getUuid(),
+							cs.getComponent());
+				});
+			});
 		};
 	}
 }
