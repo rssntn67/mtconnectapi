@@ -1145,7 +1145,7 @@ SUCH PARTY HAD ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:any processContents='strict' notNamespace='##targetNamespace' minOccurs='0' maxOccurs='unbounded'>
+      <xs:any processContents='strict' minOccurs='0' maxOccurs='unbounded'>
         <xs:annotation>
           <xs:documentation>
             Any additional properties
@@ -1239,7 +1239,7 @@ SUCH PARTY HAD ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:any processContents='strict' notNamespace='##targetNamespace' minOccurs='0' maxOccurs='unbounded'>
+      <xs:any processContents='strict' minOccurs='0' maxOccurs='unbounded'>
         <xs:annotation>
           <xs:documentation>
             Any additional properties
@@ -2066,7 +2066,7 @@ SUCH PARTY HAD ADVANCE NOTICE OF THE POSSIBILITY OF SUCH DAMAGES.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:any processContents='strict' notNamespace='##targetNamespace' minOccurs='0' maxOccurs='unbounded'>
+      <xs:any processContents='strict' minOccurs='0' maxOccurs='unbounded'>
         <xs:annotation>
           <xs:documentation>
             Any additional properties
