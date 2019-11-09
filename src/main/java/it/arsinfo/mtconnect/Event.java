@@ -1,11 +1,15 @@
 package it.arsinfo.mtconnect;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Event {
 	private final long id;
     private final String content;
     private final String device;
     private final String component; 
     private final String type; 
+    private static final Logger log = LoggerFactory.getLogger(Event.class);
 
     public Event(long id, String device, String component, String type, String content) {
 		super();
@@ -37,5 +41,9 @@ public class Event {
 
     public String getContent() {
         return content;
+    }
+    
+    public void log() {
+    	log.info(this.toString());
     }
 }

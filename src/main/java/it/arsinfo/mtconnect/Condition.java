@@ -1,5 +1,8 @@
 package it.arsinfo.mtconnect;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Condition {
 	private final long id;
     private final String content;
@@ -7,6 +10,7 @@ public class Condition {
     private final String component; 
     private final String type; 
     private final String name; 
+    private static final Logger log = LoggerFactory.getLogger(Condition.class);
 
     public Condition(long id, String device, String component, String name, String type, String content) {
 		super();
@@ -51,4 +55,8 @@ public class Condition {
     public String getContent() {
         return content;
     }
+    public void log() {
+    	log.info(this.toString());
+    }
+
 }

@@ -21,7 +21,6 @@ public class MtConnectApiDao {
 	
 	
     private final AtomicLong counter = new AtomicLong();
-    private static final Logger log = LoggerFactory.getLogger(MtConnectApiDao.class);
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -60,7 +59,7 @@ public class MtConnectApiDao {
 						}
 				});
 			});
-			events.forEach(eve -> log.info(eve.toString()));
+			events.forEach(eve -> eve.log());
 		
 		});
 
@@ -84,7 +83,7 @@ public class MtConnectApiDao {
 								e.getValue().getName()));
 				});
 			});
-			conditions.forEach(eve -> log.info(eve.toString()));
+			conditions.forEach(cond -> cond.toString());
 		
 		});
 		return conditions;
