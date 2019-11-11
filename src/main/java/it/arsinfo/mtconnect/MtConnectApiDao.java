@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,9 +24,19 @@ public class MtConnectApiDao {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Value("${mtconnect.remote.url}")
+    private String mtconnectRemoteUrl;
+
+	
+	public String getMtconnectRemoteUrl() {
+		return mtconnectRemoteUrl;
+	}
+	public void setMtconnectRemoteUrl(String mtconnectRemoteUrl) {
+		this.mtconnectRemoteUrl = mtconnectRemoteUrl;
+	}
 	private MTConnectStreamsType get() {
 		return restTemplate.getForObject(
-				"https://smstestbed.nist.gov/vds/current", MTConnectStreamsType.class);		
+				mtconnectRemoteUrl, MTConnectStreamsType.class);		
 	}
 	public List<Event> getEvents(String name) {
 		final List<Event> events = new ArrayList<>();

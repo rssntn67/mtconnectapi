@@ -31,10 +31,16 @@ public class ApplicationTest {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private MtConnectApiDao mtConnectApiDao;
 
 	@Test
 	public void contextLoads() {
 		assertThat(restTemplate).isNotNull();
+		assertThat(mtConnectApiDao).isNotNull();
+		assertThat(mtConnectApiDao.getMtconnectRemoteUrl()).isNotNull();
+		System.err.println(mtConnectApiDao.getMtconnectRemoteUrl());
 	}
 
 }
